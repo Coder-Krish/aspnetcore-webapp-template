@@ -24,6 +24,7 @@ This is a template project for building a web application using .NET 6 as the ba
    * To Login as admin there is an admin user created already that has username `admin` and password `pass123`. You can use this credential to login.
 4. API Documentation:
    * Access the API documentation using Swagger UI at `https://localhost:7050/swagger/index.html`.
+    ![swagger](swagger-screen.png)
 5. Customization:
    * To add a client you can use Client folder inside Api class library in which a sample angular app is loaded, you can change it according to your needs.
    * Add additional libraries, services, and middleware as needed for your project.
