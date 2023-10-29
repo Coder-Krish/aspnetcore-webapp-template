@@ -21,6 +21,7 @@ This is a template project for building a web application using .NET 6 as the ba
    * Clone or download this repository.
    * Navigate to the project folder in your terminal and run `dotnet restore` to restore the required dependencies.
    * Start the application by running `dotnet run`.
+   * To Login as admin there is an admin user created already that has username `admin` and password `pass123`. You can use this credential to login.
 4. API Documentation:
    * Access the API documentation using Swagger UI at `https://localhost:7050/swagger/index.html`.
 5. Customization:
