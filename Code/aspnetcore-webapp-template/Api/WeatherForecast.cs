@@ -1,4 +1,4 @@
-namespace aspnetcore_webapp_template
+namespace API
 {
     public class WeatherForecast
     {
