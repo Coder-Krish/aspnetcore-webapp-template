@@ -23,12 +23,31 @@ namespace SaiBilling.Controllers
             {
                 throw new ArgumentNullException(nameof(userLoginRequest));
             }
-            var token = _authenticationService.AuthenticateUser(userLoginRequest);
-            if (token is not null && token.Result is null)
+            //var token = _authenticationService.AuthenticateUser(userLoginRequest);
+            //if (token is not null && token.Result is null)
+            //{
+            //    throw new UnauthorizedAccessException("Please provide correct credentials!!");
+            //}
+            //return StatusCode(StatusCodes.Status200OK, token);
+           
+            var identityUser = await _authenticationService.AuthenticateUser(userLoginRequest);
+            if (identityUser != null)
             {
-                throw new UnauthorizedAccessException("Please provide correct credentials!!");
+                var tokenString = _authenticationService.GenerateTokenString(identityUser);
+
+                return Ok(tokenString);
             }
-            return StatusCode(StatusCodes.Status200OK, token);
+            return BadRequest();
+        }
+
+        [HttpPost("RegisterUser")]
+        public async Task<bool> RegisterUser([FromBody] UserRegistration_DTO user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            return await _authenticationService.RegisterUser(user);
         }
     }
 }

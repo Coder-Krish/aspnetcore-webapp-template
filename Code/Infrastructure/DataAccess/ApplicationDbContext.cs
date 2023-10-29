@@ -1,23 +1,15 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataAccess
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-        public virtual DbSet<UserModel> Users { get; set; } = null!;
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UserModel>(entity =>
-            {
-                entity.ToTable("MST_User");
-                entity.HasKey(e => e.UserId);
-                entity.HasIndex(e => e.UserName, "UQ_MST_User_UserName").IsUnique();
-            });
-        }
-            
+
+        public DbSet<ApplicationUsers> ApplicationUsers { get; set; }
     }
 }

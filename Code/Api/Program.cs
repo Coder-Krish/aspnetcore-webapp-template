@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,9 +62,21 @@ builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", config =>
 }));
 
 /*Start Adding Connection String here*/
-var connectionString = builder.Configuration.GetConnectionString("AppDb");
-builder.Services.AddDbContext<ApplicationDbContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AppDb"), x=> x.MigrationsAssembly("Infrastructure"));
+    
+});
 /*End of Adding Connection string section*/
+
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+  .AddDefaultTokenProviders();
 
 //Below code should be used if angular is used as a client
 //builder.Services.AddSpaStaticFiles(configuration =>

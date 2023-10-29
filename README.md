@@ -8,6 +8,7 @@ This is a template project for building a web application using .NET 6 as the ba
 * Entity Framework Core: Entity Framework Core is used as the Object-Relational Mapping (ORM) framework for working with the database. It simplifies data access and allows you to define your data model using C# classes.
 * Dependency Injection: .NET 6's built-in Dependency Injection container is configured for managing application dependencies. This promotes clean, testable, and maintainable code.
 * API Endpoints: A basic set of API endpoints is pre-configured, including endpoints for user authentication.
+* Microsoft.Identity: A membership tools that provides login, registration, etc features in built.
 * Authentication and Authorization: User authentication is set up using JSON Web Tokens (JWT) for securing your API endpoints. You can easily expand this to include role-based authorization.
 * Swagger Documentation: Swagger UI is included to help you explore and test your API endpoints easily. It provides interactive documentation for your APIs.
 
@@ -16,12 +17,16 @@ This is a template project for building a web application using .NET 6 as the ba
    * [.NET 6 SDK](https://dotnet.microsoft.com/download)
    * [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 2. Database Setup:
-   * After cloning the Repo go inside Database folder and execute the script, After that update the connection string in appsettings.json with your database details.
+   * Update the connection string in appsettings.json with your database details.
 3. Running the Application:
    * Clone or download this repository.
    * Navigate to the project folder in your terminal and run `dotnet restore` to restore the required dependencies.
+   * Open Package Manager Console and Select Infrastructure as a Default Project (DbContext resides inside Infrastructure) and do migrations using below mentioned commands.
+       ```
+       add-migration initial
+       update-database   
+       ```
    * Start the application by running `dotnet run`.
-   * To Login as admin there is an admin user created already that has username `admin` and password `pass123`. You can use this credential to login.
 4. API Documentation:
    * Access the API documentation using Swagger UI at `https://localhost:7050/swagger/index.html`.
     ![swagger](swagger-screen.png)
@@ -32,13 +37,11 @@ This is a template project for building a web application using .NET 6 as the ba
 
 ## Project Structure
 ```
-├─Code
-│	├─Api (WebApp, Add Client inside Client folder here)
-│	├─Domain (Domain Layer, Entities are here)
-│	├─Application (Application Layer, Application Logic comes here, Any common things like interfaces are here, dtos are here)
-│	└─Infrastructure (Infrastructure Layer, DataAccess is here)
-└─Database
-	└─database-creation-script.sql
+└─Code
+	├─Api (WebApp, Add Client inside Client folder here)
+	├─Domain (Domain Layer, Entities are here)
+	├─Application (Application Layer, Application Logic comes here, Any common things like interfaces are here, dtos are here)
+	└─Infrastructure (Infrastructure Layer, DataAccess is here)
 ```
 
 ## Disclaimer
