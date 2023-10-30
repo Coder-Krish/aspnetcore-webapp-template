@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # Ignore package-lock.json
 package-lock.json
+
+# Ignore Migrations folder
+Migrations/
