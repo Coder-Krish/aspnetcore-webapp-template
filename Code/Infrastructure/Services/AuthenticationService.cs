@@ -1,6 +1,7 @@
 ﻿using Application.Common.dto;
 using Application.Common.DTOs;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Infrastructure.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -13,12 +14,10 @@ namespace Infrastructure.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthenticationService(IConfiguration configuration, UserManager<IdentityUser> userManager)
+        public AuthenticationService(UserManager<IdentityUser> userManager)
         {
-            _configuration = configuration;
             _userManager = userManager;
         }
         public async Task<object> AuthenticateUser(UserLoginRequest_DTO userLoginRequest)
@@ -26,13 +25,13 @@ namespace Infrastructure.Services
             var identityUser = await _userManager.FindByEmailAsync(userLoginRequest.UserName);
             if(identityUser == null)
             {
-                return false;
+                return null;
             }
             if(await _userManager.CheckPasswordAsync(identityUser, userLoginRequest.Password))
             {
                 return identityUser;
             }
-            return false;
+            return null;
         }
 
         public async Task<bool> RegisterUser(UserRegistration_DTO user)
@@ -51,7 +50,8 @@ namespace Infrastructure.Services
         {
             var identityUser = (IdentityUser)user;
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Tokens:JwtKey"]);
+            //var key = Encoding.ASCII.GetBytes(_configuration["Tokens:JwtKey"]);
+            var key = Encoding.ASCII.GetBytes(JwtToken.JwtKey);
 
             var claims = new List<Claim>();
             claims.Add(new Claim("UserName", identityUser.UserName));
@@ -60,13 +60,15 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Tokens:JwtValidMinutes"])),
-                Issuer = _configuration["Tokens:JwtIssuer"],
-                Audience = _configuration["Tokens:JwtAudience"],
+                //Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Tokens:JwtValidMinutes"])),
+                Expires = DateTime.UtcNow.AddMinutes(Convert.ToDouble(JwtToken.JwtValidMinutes)),
+                Issuer = JwtToken.JwtIssuer,
+                Audience = JwtToken.JwtAudience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var jwt = tokenHandler.CreateToken(tokenDescriptor);
+            string token = tokenHandler.WriteToken(jwt);
+            return token;
         }
     }
 }

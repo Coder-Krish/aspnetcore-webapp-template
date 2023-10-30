@@ -34,8 +34,10 @@ namespace SaiBilling.Controllers
             if (identityUser != null)
             {
                 var tokenString = _authenticationService.GenerateTokenString(identityUser);
-
-                return Ok(tokenString);
+                if(tokenString != null)
+                {
+                    return Ok(tokenString.Result);
+                }
             }
             return BadRequest();
         }

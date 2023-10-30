@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Application.Common.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,11 +104,17 @@ builder.Services.AddAuthentication(options =>
            {
                // The signing key must match!
                ValidateIssuerSigningKey = true,
-               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:JwtKey"])),
+               //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:JwtKey"])),
+               //ValidateIssuer = false,
+               //ValidateAudience = false,
+               //ValidAudience = builder.Configuration["Tokens:JwtAudience"],
+               //ValidIssuer = builder.Configuration["Tokens:JwtIssuer"]
+
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtToken.JwtKey)),
                ValidateIssuer = false,
                ValidateAudience = false,
-               ValidAudience = builder.Configuration["Tokens:JwtAudience"],
-               ValidIssuer = builder.Configuration["Tokens:JwtIssuer"]
+               ValidAudience = JwtToken.JwtAudience,
+               ValidIssuer = JwtToken.JwtIssuer
            };
        });
 
